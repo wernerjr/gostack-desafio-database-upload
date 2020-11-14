@@ -63,7 +63,7 @@ class ImportTransactionsService {
       newTransactionsBalance < 0 &&
       balance.total + newTransactionsBalance < 0
     )
-      throw new AppError('You dont have this value to outcome.');
+      throw new AppError('You dont have this sum of value to outcome.', 400);
 
     csvTransactions.forEach(transaction => {
       const category_id = categories.find(
@@ -94,7 +94,7 @@ class ImportTransactionsService {
     const categoryRepository = getRepository(Category);
     const categoriesList = csvTransactions.reduce(
       (categories, newCategory) =>
-        this.getUnicCategory(categories, newCategory.category),
+        this.getUniqueCategory(categories, newCategory.category),
       [] as NewCategory[],
     );
 
@@ -114,7 +114,7 @@ class ImportTransactionsService {
     return existingCategories.concat(newCategories);
   }
 
-  private getUnicCategory(
+  private getUniqueCategory(
     categories: NewCategory[],
     newCategory: string,
   ): NewCategory[] {
